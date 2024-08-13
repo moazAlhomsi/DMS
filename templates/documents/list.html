@@ -1,0 +1,12 @@
+<!-- documents/templates/documents/list.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Document List</h2>
+  <ul>
+    {% for document in documents %}
+      <li>{{ document.title }} ({{ document.file_type }}) - Uploaded by {{ document.uploaded_by }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
