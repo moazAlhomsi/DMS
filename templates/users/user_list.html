@@ -4,9 +4,39 @@
 
 {% block content %}
 <h2>All Users</h2>
+
 <ul>
-    {% for user in users %}
-    <li>{{ user.username }} - {{ user.email }}</li>
-    {% endfor %}
+    <form method="post" action="{% url 'perform_action' %}">
+        {% csrf_token %}
+        {% for user in users %}
+        <li><input type="checkbox" name="selected_users" value="{{ user.id }}"> <a href="{% url 'profile' user.id %}">{{ user.username }}</a> - {{ user.email }}</li>
+        <a href="{% url 'delete_user' user.id %}">delete</a>
+        {% endfor %}
+        <select name="action">
+            <option value="">Select Action</option>
+            <option value="delete">Delete Selected Users</option>
+            <option value="activate">Activate Selected Users</option>
+            <option value="deactivate">Deactivate Selected Users</option>
+        </select>
+        <input type="submit" value="do action">
+    </form>
 </ul>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}
