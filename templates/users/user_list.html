@@ -3,24 +3,38 @@
 {% block title %}User List{% endblock %}
 
 {% block content %}
-<h2>All Users</h2>
+<div style="display: flex; flex-direction: row; justify-content: space-between;">
+    <h1>All Users</h1>
+    <h6 style="align-self: center;"><a href="{% url 'create_user' %}">add User</a></h6>
+</div>
 
-<ul>
-    <form method="post" action="{% url 'perform_action' %}">
-        {% csrf_token %}
-        {% for user in users %}
-        <li><input type="checkbox" name="selected_users" value="{{ user.id }}"> <a href="{% url 'profile' user.id %}">{{ user.username }}</a> - {{ user.email }}</li>
-        <a href="{% url 'delete_user' user.id %}">delete</a>
-        {% endfor %}
-        <select name="action">
-            <option value="">Select Action</option>
-            <option value="delete">Delete Selected Users</option>
-            <option value="activate">Activate Selected Users</option>
-            <option value="deactivate">Deactivate Selected Users</option>
-        </select>
-        <input type="submit" value="do action">
-    </form>
-</ul>
+<div>
+    <ul>
+        <div>
+            <select name="action">
+                <option value="">Select Action</option>
+                <option value="delete">Delete Selected Users</option>
+                <option value="activate">Activate Selected Users</option>
+                <option value="deactivate">Deactivate Selected Users</option>
+            </select>
+            <input type="submit" value="do action">
+        </div>
+        <form method="post" action="{% url 'perform_action' %}">
+            {% csrf_token %}
+            {% for user in users %}
+            <div>
+                <li><input type="checkbox" name="selected_users" value="{{ user.id }}"> 
+                    <a href="{% url 'profile' user.id %}">
+                        {{ user.username }}
+                    </a>
+                     - {{ user.email }} 
+                    <a href="{% url 'delete_user' user.id %}">delete</a>
+                </li>
+            </div>
+            {% endfor %}
+        </form>
+    </ul>
+</div>
 
 <div class="pagination">
     <span class="step-links">

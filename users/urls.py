@@ -8,7 +8,7 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name='logout'), # new
     path('profile/<str:user_id>', views.ProfileView.as_view(), name='profile'), # added update-profile functionality
     path('create-user/', views.AdminCreateUserView.as_view(), name='create_user'),
-    path('delete-user/<str:user_id>', views.DeleteUserView.as_view(), name='delete_user'), # new
+    path('delete-user/<str:pk>', views.DeleteUserView.as_view(), name='delete_user'), # new
     path('change-password/<str:user_id>', views.AdminChangePasswordView.as_view(), name='change_password'), # new
     path('perform-action/', views.PerformActionView.as_view(), name='perform_action'), # new
     

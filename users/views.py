@@ -10,7 +10,7 @@ from .models import User
 from .forms import UserRegistrationForm, UserUpdateForm, AdminChangePasswordForm ,UserLoginForm # UserLoginForm will not be used in this snippet
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import get_user_model
-from django.views.generic import ListView
+from django.views.generic import ListView , DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 User = get_user_model()
 
@@ -109,15 +109,12 @@ class ProfileView(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class DeleteUserView(View):
-    def post(self,request,user_id):
-        try:
-            User.objects.get(id=user_id).delete()
-            return redirect('user_list')
-        except User.DoesNotExist:
-            return HttpResponse('user does not exist')
-
-
+class DeleteUserView(DeleteView):
+    model = User
+    template_name = 'users/delete_user.html'
+    context_object_name = 'user'
+    success_url = '/users/list/'
+    
 
 
 @method_decorator(login_required, name='dispatch')
