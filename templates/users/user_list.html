@@ -5,11 +5,13 @@
 {% block content %}
 <div style="display: flex; flex-direction: row; justify-content: space-between;">
     <h1>All Users</h1>
+    {% if request.user.role == 'Moderator' or 'Admin' %}
     <h6 style="align-self: center;"><a href="{% url 'create_user' %}">add User</a></h6>
+    {% endif %}
 </div>
 
 <div>
-    <ul>
+    <form method="post" action="{% url 'perform_action' %}">
         <div>
             <select name="action">
                 <option value="">Select Action</option>
@@ -19,21 +21,19 @@
             </select>
             <input type="submit" value="do action">
         </div>
-        <form method="post" action="{% url 'perform_action' %}">
-            {% csrf_token %}
-            {% for user in users %}
-            <div>
-                <li><input type="checkbox" name="selected_users" value="{{ user.id }}"> 
-                    <a href="{% url 'profile' user.id %}">
-                        {{ user.username }}
-                    </a>
-                     - {{ user.email }} 
-                    <a href="{% url 'delete_user' user.id %}">delete</a>
-                </li>
-            </div>
-            {% endfor %}
-        </form>
-    </ul>
+        {% csrf_token %}
+        {% for user in users %}
+        <div>
+            <li><input type="checkbox" name="selected_users" value="{{ user.id }}"> 
+                <a href="{% url 'profile' user.id %}">
+                    {{ user.username }}
+                </a>
+                    - {{ user.email }} 
+                <a href="{% url 'delete_user' user.id %}">delete</a>
+            </li>
+        </div>
+        {% endfor %}
+    </form>
 </div>
 
 <div class="pagination">

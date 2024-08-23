@@ -21,7 +21,7 @@ class UserListView(LoginRequiredMixin, ListView):
     model = User
     template_name = 'users/user_list.html'
     context_object_name = 'users'
-    paginate_by = 2  # set pagination to an appropriate number
+    paginate_by = 3  # set pagination to an appropriate number
 
     def get_queryset(self):
         return User.objects.all()
@@ -39,7 +39,7 @@ class AdminCreateUserView(View):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('profile')  # Or redirect to a user management page
+            return redirect('user_list')  # Or redirect to a user management page
         return render(request, 'users/admin_create_user.html', {'form': form})
 
 
