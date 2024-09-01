@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .models import Document
 from .forms import DocumentUploadForm
+from django.views.generic import DetailView
 
 @method_decorator(login_required, name='dispatch')
 class DocumentUploadView(View):
@@ -30,3 +31,10 @@ class DocumentListView(View):
             private_docs = Document.objects.filter(uploaded_by=request.user, is_private=True)
             documents = documents | private_docs
         return render(request, 'documents/list.html', {'documents': documents})
+
+
+class GetDocumentView(DetailView):
+    model = Document
+    template_name = 'documents/get_document.html'
+    context_object_name = 'document'
+    

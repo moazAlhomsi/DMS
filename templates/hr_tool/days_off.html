@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Days off List{% endblock %}
+
+{% block content %}
+<div style="display: flex; flex-direction: row; justify-content: space-between;">
+    <h1>All Allocated Days off</h1>
+    {% if request.user.role == 'Moderator' or 'Admin' %}
+    <h6 style="align-self: center;"><a href="{% url 'create_day_off' %}">Allocate Day off</a></h6>
+    {% endif %}
+</div>
+
+<div>
+    <form method="post" action="">
+        <div>
+            <select name="action">
+                <option value="">Select Action</option>
+                <option value="delete">Delete Selected Records</option>
+            </select>
+            <input type="submit" value="do action">
+        </div>
+        {% csrf_token %}
+        {% for day in days %}
+        <div>
+            <li><input type="checkbox" name="selected_employees" value="{{ day.id }}"> 
+                <a href="{% url 'day_off_info' day.id %}">
+                    {{ day.employee.username }}
+                </a>
+                    - {{ day.employee.email }} 
+                <a href="{% url 'delete_day_off' day.id %}">delete</a>
+            </li>
+        </div>
+        {% endfor %}
+    </form>
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
