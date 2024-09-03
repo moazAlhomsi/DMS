@@ -4,7 +4,7 @@ from typing import Any
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
-from .models import Employee , Salary , DayOff
+from .models import Employee , Salary , Holiday
 from .forms import EmployeeRegistrationForm , EmployeeUpdateForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login , logout
@@ -82,8 +82,8 @@ class UpdateEmployeeView(UpdateView):
     # add extra data for each employee in the context
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        days_off = DayOff.objects.filter(employee=self.object).count() # get number of days off for the employee
-        context['days_off'] = days_off 
+        holidays = Holiday.objects.filter(employee=self.object).count() # get number of days off for the employee
+        context['holidays'] = holidays 
         return context
 
 
@@ -122,34 +122,34 @@ class DeleteSalaryView(DeleteView):
 
 
 @method_decorator(login_required, name='dispatch')
-class CreateDayOffView(CreateView):
-    model = DayOff
+class CreateHolidayView(CreateView):
+    model = Holiday
     fields = '__all__'
-    template_name = 'hr_tool/create_day_off.html'
-    success_url = '/hr/days-off/'
+    template_name = 'hr_tool/create_holiday.html'
+    success_url = '/hr/holidays/'
 
 
 @method_decorator(login_required, name='dispatch')
-class ListDaysOffView(ListView):
-    model = DayOff
-    template_name = 'hr_tool/days_off.html'
-    context_object_name = 'days'
+class ListHolidaysView(ListView):
+    model = Holiday
+    template_name = 'hr_tool/holiday.html'
+    context_object_name = 'holidays'
     paginate_by = 5
 
 
 @method_decorator(login_required, name='dispatch')
-class UpdateDayOffView(UpdateView):
-    model = DayOff
+class UpdateHolidayView(UpdateView):
+    model = Holiday
     fields = '__all__'
-    template_name = 'hr_tool/day_off_info.html'
-    success_url = '/hr/days-off/'
-    context_object_name = 'day'
+    template_name = 'hr_tool/holiday_info.html'
+    success_url = '/hr/holidays/'
+    context_object_name = 'holiday'
 
 
 @method_decorator(login_required, name='dispatch')
-class DeleteDayOffView(DeleteView):
-    model = DayOff
-    template_name = 'hr_tool/delete_day_off.html'
-    context_object_name = 'day'
-    success_url = '/hr/days-off/'
+class DeleteHolidayView(DeleteView):
+    model = Holiday
+    template_name = 'hr_tool/delete_holiday.html'
+    context_object_name = 'holiday'
+    success_url = '/hr/holidays/'
 

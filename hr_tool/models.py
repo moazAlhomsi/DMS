@@ -18,7 +18,7 @@ class Employee(User):
     
 
 
-class DayOff(models.Model):
+class Holiday(models.Model):
     DAYOFF_CHOICES = (
         ('Full Day','8 Hours'),
         ('Half Day','4 Hours'),

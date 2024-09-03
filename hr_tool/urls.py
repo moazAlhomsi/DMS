@@ -13,8 +13,8 @@ urlpatterns = [
     path('salary-info/<str:pk>' , views.UpdateSalaryView.as_view() , name="salary_info"),
     path('delete-salary/<str:pk>' , views.DeleteSalaryView.as_view() , name="delete_salary"),
 
-    path('days-off/' , views.ListDaysOffView.as_view() , name="days_off_list"),
-    path('create-day-off/' , views.CreateDayOffView.as_view() , name="create_day_off"),
-    path('day-off-info/<str:pk>' , views.UpdateDayOffView.as_view() , name="day_off_info"),
-    path('delete-day-off/<str:pk>' , views.DeleteDayOffView.as_view() , name="delete_day_off"),
+    path('holidays/' , views.ListHolidaysView.as_view() , name="_list"),
+    path('create-holiday/' , views.CreateHolidayView.as_view() , name="create_holiday"),
+    path('holiday-info/<str:pk>' , views.UpdateHolidayView.as_view() , name="holiday_info"),
+    path('delete-holiday/<str:pk>' , views.DeleteHolidayView.as_view() , name="delete_holiday"),
 ]
