@@ -4,7 +4,7 @@ from typing import Any
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
-from .models import Employee , Salary , Holiday
+from .models import Employee , Salary , Holiday , Absence
 from .forms import EmployeeRegistrationForm , EmployeeUpdateForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login , logout
@@ -21,7 +21,7 @@ User = get_user_model()
 @method_decorator(login_required, name='dispatch')
 class ListEmployeesView(ListView):
     model = Employee
-    template_name = 'hr_tool/employee_list.html'
+    template_name = 'hr_tool/employee/employees.html'
     context_object_name = 'employees'
     paginate_by = 5
 
@@ -57,7 +57,7 @@ class ListEmployeesView(ListView):
 class CreateEmployeeView(CreateView):
     model = Employee
     form_class = EmployeeRegistrationForm
-    template_name = 'hr_tool/create_employee.html'
+    template_name = 'hr_tool/employee/create_employee.html'
     success_url = '/hr/employees/'
     
 
@@ -66,7 +66,7 @@ class CreateEmployeeView(CreateView):
 @method_decorator(login_required, name='dispatch')
 class DeleteEmployeeView(DeleteView):
     model = Employee
-    template_name = 'hr_tool/delete_employee.html'
+    template_name = 'hr_tool/employee/delete_employee.html'
     context_object_name = 'employee'
     success_url = '/hr/employees/'
     
@@ -75,15 +75,17 @@ class DeleteEmployeeView(DeleteView):
 @method_decorator(login_required, name='dispatch')
 class UpdateEmployeeView(UpdateView):
     model = Employee
-    template_name = 'hr_tool/employee_profile.html'
+    template_name = 'hr_tool/employee/employee_profile.html'
     form_class = EmployeeUpdateForm
     success_url = '/hr/employees/'
 
     # add extra data for each employee in the context
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        holidays = Holiday.objects.filter(employee=self.object).count() # get number of days off for the employee
+        holidays = Holiday.objects.filter(employee=self.object).count() # get number of holidays for the employee
+        absences = Absence.objects.filter(employee=self.object).count() # get number of absences for the employee
         context['holidays'] = holidays 
+        context['absences'] = absences 
         return context
 
 
@@ -92,14 +94,14 @@ class UpdateEmployeeView(UpdateView):
 class CreateSalaryView(CreateView):
     model = Salary
     fields = '__all__'
-    template_name = 'hr_tool/create_salary.html'
+    template_name = 'hr_tool/salary/create_salary.html'
     success_url = '/hr/salaries/'
 
 
 @method_decorator(login_required, name='dispatch')
 class ListSalariesView(ListView):
     model = Salary
-    template_name = 'hr_tool/salaries.html'
+    template_name = 'hr_tool/salary/salaries.html'
     context_object_name = 'salaries'
     paginate_by = 5
 
@@ -108,14 +110,14 @@ class ListSalariesView(ListView):
 class UpdateSalaryView(UpdateView):
     model = Salary
     fields = '__all__'
-    template_name = 'hr_tool/salary_info.html'
+    template_name = 'hr_tool/salary/salary_info.html'
     success_url = '/hr/salaries/'
 
 
 @method_decorator(login_required, name='dispatch')
 class DeleteSalaryView(DeleteView):
     model = Salary
-    template_name = 'hr_tool/delete_salary.html'
+    template_name = 'hr_tool/salary/delete_salary.html'
     context_object_name = 'salary'
     success_url = '/hr/salaries/'
 
@@ -125,14 +127,14 @@ class DeleteSalaryView(DeleteView):
 class CreateHolidayView(CreateView):
     model = Holiday
     fields = '__all__'
-    template_name = 'hr_tool/create_holiday.html'
+    template_name = 'hr_tool/holiday/create_holiday.html'
     success_url = '/hr/holidays/'
 
 
 @method_decorator(login_required, name='dispatch')
 class ListHolidaysView(ListView):
     model = Holiday
-    template_name = 'hr_tool/holiday.html'
+    template_name = 'hr_tool/holiday/holiday.html'
     context_object_name = 'holidays'
     paginate_by = 5
 
@@ -141,7 +143,7 @@ class ListHolidaysView(ListView):
 class UpdateHolidayView(UpdateView):
     model = Holiday
     fields = '__all__'
-    template_name = 'hr_tool/holiday_info.html'
+    template_name = 'hr_tool/holiday/holiday_info.html'
     success_url = '/hr/holidays/'
     context_object_name = 'holiday'
 
@@ -149,7 +151,41 @@ class UpdateHolidayView(UpdateView):
 @method_decorator(login_required, name='dispatch')
 class DeleteHolidayView(DeleteView):
     model = Holiday
-    template_name = 'hr_tool/delete_holiday.html'
+    template_name = 'hr_tool/holiday/delete_holiday.html'
     context_object_name = 'holiday'
     success_url = '/hr/holidays/'
+
+
+
+@method_decorator(login_required, name='dispatch')
+class CreateAbsenceView(CreateView):
+    model = Absence
+    fields = '__all__'
+    template_name = 'hr_tool/absence/create_absence.html'
+    success_url = '/hr/absences/'
+
+
+@method_decorator(login_required, name='dispatch')
+class ListAbsenceView(ListView):
+    model = Absence
+    template_name = 'hr_tool/absence/absences.html'
+    context_object_name = 'absences'
+    paginate_by = 5
+
+
+@method_decorator(login_required, name='dispatch')
+class UpdateAbsenceView(UpdateView):
+    model = Absence
+    fields = '__all__'
+    template_name = 'hr_tool/absence/absence_info.html'
+    success_url = '/hr/absences/'
+    context_object_name = 'absence'
+
+
+@method_decorator(login_required, name='dispatch')
+class DeleteAbsenceView(DeleteView):
+    model = Absence
+    template_name = 'hr_tool/absence/delete_absence.html'
+    success_url = '/hr/absences/'
+    context_object_name = 'absence'
 

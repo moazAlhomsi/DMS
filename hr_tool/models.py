@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator , MaxValueValidator
 User = get_user_model()
 
 # Create your models here.
@@ -24,9 +25,23 @@ class Holiday(models.Model):
         ('Half Day','4 Hours'),
     )
     employee = models.ForeignKey(Employee , on_delete=models.CASCADE)
-    amount = models.CharField(choices=DAYOFF_CHOICES , max_length=40)
+    hours = models.CharField(choices=DAYOFF_CHOICES , max_length=40)
     start = models.DateField()
     end = models.DateField()
+
+    def __str__(self) -> str:
+        return f'{self.employee.username} - {self.hours}'
+
+
+
+class Absence(models.Model):
+    employee = models.ForeignKey(Employee , on_delete=models.CASCADE)
+    days = models.IntegerField(validators=[MinValueValidator(1) , MaxValueValidator(1000)])
+    start = models.DateField()
+    end = models.DateField()
+
+    def __str__(self) -> str:
+        return f'{self.employee.username} - {self.days}'
 
 
 

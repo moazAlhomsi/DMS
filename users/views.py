@@ -38,7 +38,11 @@ class AdminCreateUserView(View):
     def post(self, request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False) 
+            if user.role == 'admin': 
+                user.is_superuser = True
+                user.is_staff = True
+            user.save()
             return redirect('user_list')  # Or redirect to a user management page
         return render(request, 'users/admin_create_user.html', {'form': form})
 
@@ -114,11 +118,13 @@ class DeleteUserView(DeleteView):
     template_name = 'users/delete_user.html'
     context_object_name = 'user'
     success_url = '/users/list/'
-    
 
 
+
+# perform bulk operations on users (delete , activate , deactivate)
 @method_decorator(login_required, name='dispatch')
 class PerformActionView(View):
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def post(self,request):
         selected_items = request.POST.getlist('selected_users')
         users = User.objects.filter(id__in=selected_items)
@@ -134,6 +140,7 @@ class PerformActionView(View):
         
 
 
+# change password by admin
 @method_decorator(login_required, name='dispatch')
 class AdminChangePasswordView(View):
     @method_decorator(user_passes_test(lambda u: u.role=='Admin'))

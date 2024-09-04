@@ -1,35 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}Employee List{% endblock %}
+{% block title %}Absences List{% endblock %}
 
 {% block content %}
 <div style="display: flex; flex-direction: row; justify-content: space-between;">
-    <h1>All Employees</h1>
+    <h1>All Absences</h1>
     {% if request.user.role == 'Moderator' or 'Admin' %}
-    <h6 style="align-self: center;"><a href="{% url 'create_employee' %}">add Employee</a></h6>
+    <h6 style="align-self: center;"><a href="{% url 'create_absence' %}">allocate Absence</a></h6>
     {% endif %}
 </div>
 
 <div>
-    <form method="post" action="{% url 'perform_action' %}">
+    <form method="post" action="">
         <div>
             <select name="action">
                 <option value="">Select Action</option>
-                <option value="delete">Delete Selected Users</option>
-                <option value="activate">Activate Selected Users</option>
-                <option value="deactivate">Deactivate Selected Users</option>
+                <option value="delete">Delete Selected Records</option>
             </select>
             <input type="submit" value="do action">
         </div>
         {% csrf_token %}
-        {% for employee in employees %}
+        {% for absence in absences %}
         <div>
-            <li><input type="checkbox" name="selected_employees" value="{{ employee.id }}"> 
-                <a href="{% url 'employee_profile' employee.id %}">
-                    {{ employee.username }}
+            <li><input type="checkbox" name="selected_absenecs" value="{{ absence.id }}"> 
+                <a href="{% url 'absence_info' absence.id %}">
+                    {{ absence.employee.username }}
                 </a>
-                    - {{ employee.email }} 
-                <a href="{% url 'delete_employee' employee.id %}">delete</a>
+                <h5>
+                    {{absence.amount}}
+                    {{ absence.days }} 
+                </h5>
+                <a href="{% url 'delete_absence' absence.id %}">delete</a>
             </li>
         </div>
         {% endfor %}
