@@ -11,30 +11,37 @@
 </div>
 
 <div>
-    <form method="post" action="">
-        <div>
-            <select name="action">
-                <option value="">Select Action</option>
-                <option value="delete">Delete Selected Records</option>
-            </select>
-            <input type="submit" value="do action">
-        </div>
-        {% csrf_token %}
-        {% for absence in absences %}
-        <div>
-            <li><input type="checkbox" name="selected_absenecs" value="{{ absence.id }}"> 
-                <a href="{% url 'absence_info' absence.id %}">
-                    {{ absence.employee.username }}
-                </a>
-                <h5>
-                    {{absence.amount}}
-                    {{ absence.days }} 
-                </h5>
-                <a href="{% url 'delete_absence' absence.id %}">delete</a>
-            </li>
-        </div>
-        {% endfor %}
-    </form>
+    <span>
+        <form action="" method="get">
+            <input type="text" name="q" id="q" placeholder="search by name">
+        </form>
+    </span>
+    <span>
+        <form method="post" action="">
+            <div>
+                <select name="action">
+                    <option value="">Select Action</option>
+                    <option value="delete">Delete Selected Records</option>
+                </select>
+                <input type="submit" value="do action">
+            </div>
+            {% csrf_token %}
+            {% for absence in absences %}
+            <div>
+                <li><input type="checkbox" name="selected_absenecs" value="{{ absence.id }}"> 
+                    <a href="{% url 'absence_info' absence.id %}">
+                        {{ absence.employee.username }}
+                    </a>
+                    <h5>
+                        {{absence.amount}}
+                        {{ absence.days }} 
+                    </h5>
+                    <a href="{% url 'delete_absence' absence.id %}">delete</a>
+                </li>
+            </div>
+            {% endfor %}
+        </form>
+    </span>
 </div>
 
 <div class="pagination">

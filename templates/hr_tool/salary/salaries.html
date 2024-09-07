@@ -11,30 +11,37 @@
 </div>
 
 <div>
-    <form method="post" action="">
-        <div>
-            <select name="action">
-                <option value="">Select Action</option>
-                <option value="delete">Delete Selected Records</option>
-            </select>
-            <input type="submit" value="do action">
-        </div>
-        {% csrf_token %}
-        {% for salary in salaries %}
-        <div>
-            <li><input type="checkbox" name="selected_employees" value="{{ salary.id }}"> 
-                <a href="{% url 'salary_info' salary.id %}">
-                    {{ salary.employee.user.username }}
-                </a>
-                <h5>
-                    {{salary.amount}}
-                </h5>
-                    - {{ salary.employee.user.email }} 
-                <a href="{% url 'delete_salary' salary.id %}">delete</a>
-            </li>
-        </div>
-        {% endfor %}
-    </form>
+    <span>
+        <form action="" method="get">
+            <input type="text" name="q" id="q" placeholder="search by name">
+        </form>
+    </span>
+    <span>
+        <form method="post" action="">
+            <div>
+                <select name="action">
+                    <option value="">Select Action</option>
+                    <option value="delete">Delete Selected Records</option>
+                </select>
+                <input type="submit" value="do action">
+            </div>
+            {% csrf_token %}
+            {% for salary in salaries %}
+            <div>
+                <li><input type="checkbox" name="selected_employees" value="{{ salary.id }}"> 
+                    <a href="{% url 'salary_info' salary.id %}">
+                        {{ salary.employee.user.username }}
+                    </a>
+                    <h5>
+                        {{salary.amount}}
+                    </h5>
+                        - {{ salary.employee.user.email }} 
+                    <a href="{% url 'delete_salary' salary.id %}">delete</a>
+                </li>
+            </div>
+            {% endfor %}
+        </form>
+    </span>
 </div>
 
 <div class="pagination">

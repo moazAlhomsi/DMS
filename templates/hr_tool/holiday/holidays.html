@@ -11,27 +11,34 @@
 </div>
 
 <div>
-    <form method="post" action="">
-        <div>
-            <select name="action">
-                <option value="">Select Action</option>
-                <option value="delete">Delete Selected Records</option>
-            </select>
-            <input type="submit" value="do action">
-        </div>
-        {% csrf_token %}
-        {% for holiday in holidays %}
-        <div>
-            <li><input type="checkbox" name="selected_holidays  " value="{{ holiday.id }}"> 
-                <a href="{% url 'holiday_info' holiday.id %}">
-                    {{ holiday.employee.username }}
-                </a>
-                    - {{ holiday.employee.email }} 
-                <a href="{% url 'delete_holiday' holiday.id %}">delete</a>
-            </li>
-        </div>
-        {% endfor %}
-    </form>
+    <span>
+        <form action="" method="get">
+            <input type="text" name="q" id="q" placeholder="search by name">
+        </form>
+    </span>
+    <span>
+        <form method="post" action="">
+            <div>
+                <select name="action">
+                    <option value="">Select Action</option>
+                    <option value="delete">Delete Selected Records</option>
+                </select>
+                <input type="submit" value="do action">
+            </div>
+            {% csrf_token %}
+            {% for holiday in holidays %}
+            <div>
+                <li><input type="checkbox" name="selected_holidays  " value="{{ holiday.id }}"> 
+                    <a href="{% url 'holiday_info' holiday.id %}">
+                        {{ holiday.employee.username }}
+                    </a>
+                        - {{ holiday.employee.email }} 
+                    <a href="{% url 'delete_holiday' holiday.id %}">delete</a>
+                </li>
+            </div>
+            {% endfor %}
+        </form>
+    </span>
 </div>
 
 <div class="pagination">

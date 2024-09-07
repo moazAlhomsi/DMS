@@ -1,6 +1,7 @@
 # hr_tool/views.py
 
 from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
@@ -25,6 +26,14 @@ class ListEmployeesView(ListView):
     context_object_name = 'employees'
     paginate_by = 5
 
+    def get_queryset(self) -> QuerySet[Any]:
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q' , None)
+        if q:
+            queryset = queryset.filter(
+                username__startswith = q
+            )
+        return queryset
 
 
 
@@ -105,6 +114,15 @@ class ListSalariesView(ListView):
     context_object_name = 'salaries'
     paginate_by = 5
 
+    def get_queryset(self) -> QuerySet[Any]:
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q' , None)
+        if q:
+            queryset = queryset.filter(
+                employee__username__startswith = q
+            )
+        return queryset
+
 
 @method_decorator(login_required, name='dispatch')
 class UpdateSalaryView(UpdateView):
@@ -134,9 +152,19 @@ class CreateHolidayView(CreateView):
 @method_decorator(login_required, name='dispatch')
 class ListHolidaysView(ListView):
     model = Holiday
-    template_name = 'hr_tool/holiday/holiday.html'
+    template_name = 'hr_tool/holiday/holidays.html'
     context_object_name = 'holidays'
     paginate_by = 5
+
+    def get_queryset(self) -> QuerySet[Any]:
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q' , None)
+        if q:
+            queryset = queryset.filter(
+                employee__username__startswith = q
+            )
+        return queryset
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -171,6 +199,16 @@ class ListAbsenceView(ListView):
     template_name = 'hr_tool/absence/absences.html'
     context_object_name = 'absences'
     paginate_by = 5
+
+    def get_queryset(self) -> QuerySet[Any]:
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q' , None)
+        if q:
+            queryset = queryset.filter(
+                employee__username__startswith = q
+            )
+        return queryset
+
 
 
 @method_decorator(login_required, name='dispatch')

@@ -11,29 +11,37 @@
 </div>
 
 <div>
-    <form method="post" action="">
-        <div>
-            <select name="action">
-                <option value="">Select Action</option>
-                <option value="delete">Delete Selected Records</option>
-                <option value="activate">Activate Selected Records</option>
-                <option value="deactivate">Deactivate Selected Records</option>
-            </select>
-            <input type="submit" value="do action">
-        </div>
-        {% csrf_token %}
-        {% for employee in employees %}
-        <div>
-            <li><input type="checkbox" name="selected_employees" value="{{ employee.id }}"> 
-                <a href="{% url 'employee_profile' employee.id %}">
-                    {{ employee.username }}
-                </a>
-                    - {{ employee.email }} 
-                <a href="{% url 'delete_employee' employee.id %}">delete</a>
-            </li>
-        </div>
-        {% endfor %}
-    </form>
+    <span>
+        <form action="" method="get">
+            <input type="text" name="q" id="q" placeholder="search by name">
+        </form>
+    </span>
+    <span>
+        <form method="post" action="">
+            <div>
+                <select name="action">
+                    <option value="">Select Action</option>
+                    <option value="delete">Delete Selected Records</option>
+                    <option value="activate">Activate Selected Records</option>
+                    <option value="deactivate">Deactivate Selected Records</option>
+                </select>
+                <input type="submit" value="do action">
+            </div>
+            {% csrf_token %}
+            {% for employee in employees %}
+            <div>
+                <li><input type="checkbox" name="selected_employees" value="{{ employee.id }}"> 
+                    <a href="{% url 'employee_profile' employee.id %}">
+                        {{ employee.username }}
+                    </a>
+                        - {{ employee.email }} 
+                    <a href="{% url 'delete_employee' employee.id %}">delete</a>
+                </li>
+            </div>
+            {% endfor %}
+        </form> 
+    </span>
+
 </div>
 
 <div class="pagination">
