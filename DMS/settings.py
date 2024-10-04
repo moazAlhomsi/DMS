@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'users',
     'fake_admin',
     'documents',
-    'hr_tool'
+    'hr_tool',
+    'finance'
 ]
 
 # Add media settings

@@ -1,23 +1,29 @@
 # hr_tool/views.py
-
 from typing import Any
 from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.views import View
-from .models import Employee , Salary , Holiday , Absence
-from .forms import EmployeeRegistrationForm , EmployeeUpdateForm
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login , logout
+from .models import Employee , Recruitment , Holiday , Absence
+from .forms import EmployeeRegistrationForm , EmployeeUpdateForm , HolidayForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import get_user_model
-from django.views.generic import ListView , DeleteView , CreateView , UpdateView
+from django.views.generic import ListView , DeleteView , CreateView , UpdateView , DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from utility.helper import change_format , reverse_format
+
 User = get_user_model()
 
 # Create your views here.
+
+
+
+class MainHR(View):
+    def get(slef,request):
+        return render(request , 'hr_tool/HR.html')
+
+
 
 @method_decorator(login_required, name='dispatch')
 class ListEmployeesView(ListView):
@@ -100,53 +106,21 @@ class UpdateEmployeeView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
-class CreateSalaryView(CreateView):
-    model = Salary
-    fields = '__all__'
-    template_name = 'hr_tool/salary/create_salary.html'
-    success_url = '/hr/salaries/'
-
-
-@method_decorator(login_required, name='dispatch')
-class ListSalariesView(ListView):
-    model = Salary
-    template_name = 'hr_tool/salary/salaries.html'
-    context_object_name = 'salaries'
-    paginate_by = 5
-
-    def get_queryset(self) -> QuerySet[Any]:
-        queryset = super().get_queryset()
-        q = self.request.GET.get('q' , None)
-        if q:
-            queryset = queryset.filter(
-                employee__username__startswith = q
-            )
-        return queryset
-
-
-@method_decorator(login_required, name='dispatch')
-class UpdateSalaryView(UpdateView):
-    model = Salary
-    fields = '__all__'
-    template_name = 'hr_tool/salary/salary_info.html'
-    success_url = '/hr/salaries/'
-
-
-@method_decorator(login_required, name='dispatch')
-class DeleteSalaryView(DeleteView):
-    model = Salary
-    template_name = 'hr_tool/salary/delete_salary.html'
-    context_object_name = 'salary'
-    success_url = '/hr/salaries/'
-
-
-
-@method_decorator(login_required, name='dispatch')
-class CreateHolidayView(CreateView):
-    model = Holiday
-    fields = '__all__'
-    template_name = 'hr_tool/holiday/create_holiday.html'
-    success_url = '/hr/holidays/'
+class CreateHolidayView(View):
+    def get(self,request):
+        form = HolidayForm()
+        return render(request , 'hr_tool/holiday/create_holiday.html' , {'form' : form})
+    
+    def post(self,requset):
+        form = HolidayForm(requset.POST)
+        if form.is_valid():
+            holiday = form.save(commit=False)
+            start_date, end_date = form.cleaned_data['daterange'].split('-')
+            holiday.start = change_format(start_date)
+            holiday.end = change_format(end_date)
+            holiday.save()
+            return redirect('holidays_list')
+        return redirect('create_holiday')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -168,12 +142,26 @@ class ListHolidaysView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-class UpdateHolidayView(UpdateView):
-    model = Holiday
-    fields = '__all__'
-    template_name = 'hr_tool/holiday/holiday_info.html'
-    success_url = '/hr/holidays/'
-    context_object_name = 'holiday'
+class UpdateHolidayView(View):
+    def get(self,request,pk):
+        holiday = Holiday.objects.get(id=pk)
+        form = HolidayForm(instance=holiday)
+        start = reverse_format(holiday.start)
+        end = reverse_format(holiday.end)
+        form.initial['daterange'] = f"{start} - {end}"
+        print(form.initial['daterange'])
+        return render(request , 'hr_tool/holiday/holiday_info.html' , {'form' : form})
+    
+    def post(self,requset,pk):
+        form = HolidayForm(requset.POST , instance=Holiday.objects.get(id=pk))
+        if form.is_valid():
+            holiday = form.save(commit=False)
+            start_date, end_date = form.cleaned_data['daterange'].split('-')
+            holiday.start = change_format(start_date)
+            holiday.end = change_format(end_date)
+            holiday.save()
+            return redirect('holidays_list')
+        return redirect('holiday_info')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -223,7 +211,32 @@ class UpdateAbsenceView(UpdateView):
 @method_decorator(login_required, name='dispatch')
 class DeleteAbsenceView(DeleteView):
     model = Absence
-    template_name = 'hr_tool/absence/delete_absence.html'
+    template_name = 'hr_tool/absence/list_absences.html'
     success_url = '/hr/absences/'
     context_object_name = 'absence'
+
+
+
+
+class ListRecruitersView(ListView):
+    model = Recruitment
+    template_name = 'hr_tool/recruitment/list_recruiters.html'
+    context_object_name = 'recruiters'
+    paginate_by = 5
+
+    def get_queryset(self) -> QuerySet[Any]:
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q' , None)
+        if q:
+            queryset = queryset.filter(
+                first_name__startswith = q
+            )
+        return queryset
+    
+
+
+# class GetRecruiterView(DetailView):
+#     model = Recruitment
+#     template_name = 'hr_tool/recruitment/recruiter_info.html'
+#     context_object_name = 'recruiter'
 

@@ -1,5 +1,6 @@
 # users/models.py
 
+from typing import Iterable
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -8,7 +9,8 @@ class User(AbstractUser):
         ('admin', 'Admin'),
         ('moderator', 'Moderator'),
         ('normal', 'Normal User'),
-    ]       
+    ]
+    image = models.ImageField(upload_to='users/images',default='placeholder.jpg',null=True,blank=True)       
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='normal')
 
     groups = models.ManyToManyField(
@@ -39,3 +41,13 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+
+
+# class Settings(models.Model):
+#     info = models.CharField(max_length=100)
+
+#     def save(self, force_insert: bool = ..., force_update: bool = ..., using: str | None = ..., update_fields: Iterable[str] | None = ...) -> None:
+#         if 
+#         return super().save(force_insert, force_update, using, update_fields)

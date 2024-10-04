@@ -44,6 +44,12 @@
                                 Documents
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="{% url 'employee_list' %}">
+                                <svg class="bi"><use xlink:href="#file-earmark"/></svg>
+                                HR
+                            </a>
+                        </li>
                         <!-- Add more links as needed -->
                     </ul>
                 </div>
@@ -56,40 +62,52 @@
                 <h1 class="h2">Dashboard</h1>
             </div>
 
-            <!-- Section for Users App -->
+            <!-- Section for Absences -->
             <div class="row">
                 <div class="col-md-6">
                     <div class="card mb-4 shadow-sm">
                         <div class="card-header">
-                            <h4 class="my-0 fw-normal">User Management</h4>
+                            <h4 class="my-0 fw-normal">Absences Management</h4>
                         </div>
                         <div class="card-body">
                             <p>Manage users and their roles within the system.</p>
-                            <a href="{% url 'user_list' %}" class="btn btn-primary">Go to Users</a>
+                            <a href="{% url 'absences_list' %}" class="btn btn-primary">Go to Absences</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Section for Documents App -->
+                <!-- Section for Holiday -->
                 <div class="col-md-6">
                     <div class="card mb-4 shadow-sm">
                         <div class="card-header">
-                            <h4 class="my-0 fw-normal">Document Management</h4>
+                            <h4 class="my-0 fw-normal">Holiday Management</h4>
                         </div>
                         <div class="card-body">
-                            <p>Upload and manage documents like PDFs, images, and videos.</p>
-                            <a href="{% url 'document_list' %}" class="btn btn-primary">Go to Documents</a>
+                            <p>Manage and allocate golidays to each employee</p>
+                            <a href="{% url 'holidays_list' %}" class="btn btn-primary">Go to Holidays</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Section for Absences -->
+                <div class="col-md-6">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="my-0 fw-normal">Employee Management</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Create and manage employees</p>
+                            <a href="{% url 'employee_list' %}" class="btn btn-primary">Go to Employees</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="card mb-4 shadow-sm">
                         <div class="card-header">
-                            <h4 class="my-0 fw-normal">HR Management</h4>
+                            <h4 class="my-0 fw-normal">Recruitment Management</h4>
                         </div>
                         <div class="card-body">
-                            <p>Manage employees, holidays, absences and more...</p>
-                            <a href="{% url 'hr' %}" class="btn btn-primary">Go to HR</a>
+                            <p>Manage and Interview recruiters</p>
+                            <a href="{% url 'recruiters_list' %}" class="btn btn-primary">Go to Recruitment</a>
                         </div>
                     </div>
                 </div>

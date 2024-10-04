@@ -28,6 +28,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('documents/', include('documents.urls')),
     path('hr/', include('hr_tool.urls')),
+    # path('error/' , )
 ]
 
 if settings.DEBUG:

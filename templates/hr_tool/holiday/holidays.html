@@ -4,42 +4,64 @@
 
 {% block content %}
 <div style="display: flex; flex-direction: row; justify-content: space-between;">
-    <h1>All Allocated Days off</h1>
+    <h1>Holidays</h1>
     {% if request.user.role == 'Moderator' or 'Admin' %}
-    <h6 style="align-self: center;"><a href="{% url 'create_holiday' %}">Allocate Day off</a></h6>
+    <h6 style="align-self: center;"><a href="{% url 'create_holiday' %}"><button type="button" class="btn btn-success">Add +</button></a></h6>
     {% endif %}
 </div>
 
-<div>
-    <span>
-        <form action="" method="get">
-            <input type="text" name="q" id="q" placeholder="search by name">
-        </form>
-    </span>
-    <span>
-        <form method="post" action="">
+
+
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">select</th>
+        <th scope="col">ID</th>
+        <th scope="col">Username</th>
+        <th scope="col">Hours</th>
+        <th scope="col">From</th>
+        <th scope="col">To</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+
+        <span>
+            <form action="" method="get">
+                <input type="text" name="q" id="q" placeholder="search by name">
+            </form>
+        </span>
+        <form method="post" action="{% url 'perform_action' %}">
             <div>
                 <select name="action">
                     <option value="">Select Action</option>
                     <option value="delete">Delete Selected Records</option>
+                    <option value="activate">Activate Selected Records</option>
+                    <option value="deactivate">Deactivate Selected Records</option>
                 </select>
                 <input type="submit" value="do action">
             </div>
             {% csrf_token %}
             {% for holiday in holidays %}
-            <div>
-                <li><input type="checkbox" name="selected_holidays  " value="{{ holiday.id }}"> 
-                    <a href="{% url 'holiday_info' holiday.id %}">
-                        {{ holiday.employee.username }}
-                    </a>
-                        - {{ holiday.employee.email }} 
-                    <a href="{% url 'delete_holiday' holiday.id %}">delete</a>
-                </li>
-            </div>
+            <tr>
+                <td><input type="checkbox" name="selected_users" value="{{ holiday.id }}"></td>
+                <th scope="row"><a href="{% url 'employee_profile' holiday.id %}">{{ holiday.id }}</a></th>
+                <td>{{ holiday.employee.username }}</td>
+                <td>{{ holiday.hours }}</td>
+                <td>{{ holiday.start }}</td>
+                <td>{{ holiday.end }}</td>
+                <td><a href="{% url 'delete_employee' holiday.id %}"><button type="button" class="btn btn-danger">delete</button></a></td>
+              </tr>
             {% endfor %}
         </form>
-    </span>
-</div>
+
+
+    </tbody>
+</table>
+
+
+
+
 
 <div class="pagination">
     <span class="step-links">

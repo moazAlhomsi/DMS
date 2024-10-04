@@ -6,35 +6,64 @@
 <div style="display: flex; flex-direction: row; justify-content: space-between;">
     <h1>All Users</h1>
     {% if request.user.role == 'Moderator' or 'Admin' %}
-    <h6 style="align-self: center;"><a href="{% url 'create_user' %}">add User</a></h6>
+    <h6 style="align-self: center;"><a href="{% url 'create_user' %}"><button type="button" class="btn btn-success">Add +</button></a></h6>
     {% endif %}
 </div>
 
-<div>
-    <form method="post" action="{% url 'perform_action' %}">
-        <div>
-            <select name="action">
-                <option value="">Select Action</option>
-                <option value="delete">Delete Selected Users</option>
-                <option value="activate">Activate Selected Users</option>
-                <option value="deactivate">Deactivate Selected Users</option>
-            </select>
-            <input type="submit" value="do action">
-        </div>
-        {% csrf_token %}
-        {% for user in users %}
-        <div>
-            <li><input type="checkbox" name="selected_users" value="{{ user.id }}"> 
-                <a href="{% url 'profile' user.id %}">
-                    {{ user.username }}
-                </a>
-                    - {{ user.email }} 
-                <a href="{% url 'delete_user' user.id %}">delete</a>
-            </li>
-        </div>
-        {% endfor %}
-    </form>
-</div>
+
+
+
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">select</th>
+        <th scope="col">ID</th>
+        <th scope="col">Username</th>
+        <th scope="col">Email</th>
+        <th scope="col">Role</th>
+        <th scope="col">active</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+
+
+        <form method="post" action="{% url 'perform_action' %}">
+            <div>
+                <select name="action">
+                    <option value="">Select Action</option>
+                    <option value="delete">Delete Selected Users</option>
+                    <option value="activate">Activate Selected Users</option>
+                    <option value="deactivate">Deactivate Selected Users</option>
+                </select>
+                <input type="submit" value="do action">
+            </div>
+            {% csrf_token %}
+            {% for user in users %}
+            <tr>
+                <td><input type="checkbox" name="selected_users" value="{{ user.id }}"></td>
+                <th scope="row"><a href="{% url 'profile' user.id %}">{{ user.id }}</a></th>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                    {% if user.is_active == True %}
+                        <i class="bi bi-check"></i>
+                    {% else %}
+                        <i class="bi bi-x-lg"></i>
+                    {% endif %}
+                </td>
+                <td><a href="{% url 'delete_user' user.id %}"><button type="button" class="btn btn-danger">delete</button></a></td>
+              </tr>
+            {% endfor %}
+        </form>
+
+
+    </tbody>
+  </table>
+
+
+
 
 <div class="pagination">
     <span class="step-links">

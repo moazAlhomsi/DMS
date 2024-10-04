@@ -1,7 +1,6 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm 
-from .models import Employee
+from .models import Employee , Holiday
 from django import forms
-from django.forms.widgets import PasswordInput
+from django.forms.widgets import TextInput
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -27,3 +26,11 @@ class EmployeeUpdateForm(forms.ModelForm):
     class Meta:
         model = Employee
         exclude = ['last_login','date_joined','password','is_superuser','is_staff','groups','user_permissions']
+
+
+
+class HolidayForm(forms.ModelForm):
+    daterange = forms.CharField(widget=TextInput(attrs={'name':'daterange'}))
+    class Meta:
+        model = Holiday
+        fields = ['employee' , 'daterange', 'hours']

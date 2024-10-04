@@ -7,8 +7,17 @@ User = get_user_model()
 
 
 class Employee(User):
-    position = models.CharField(max_length=100)
-    department = models.CharField(max_length=100)
+    POSITION_CHOICES = (
+        ('Intern','Intern'),
+        ('Full-Time','Full-Time'),
+        ('Part-Time','Part-Time'),
+    )
+    DEPARTMENT_CHOICES = (
+        ('HR','HR'),
+        ('Finance','Finance'),
+    )
+    position = models.CharField(max_length=100, choices=POSITION_CHOICES, default='Full-Time')
+    department = models.CharField(max_length=100, choices=DEPARTMENT_CHOICES, default='HR')
 
     class Meta:
         verbose_name = 'employee'
@@ -20,12 +29,12 @@ class Employee(User):
 
 
 class Holiday(models.Model):
-    DAYOFF_CHOICES = (
+    HOLIDAY_CHOICES = (
         ('Full Day','8 Hours'),
         ('Half Day','4 Hours'),
     )
     employee = models.ForeignKey(Employee , on_delete=models.CASCADE)
-    hours = models.CharField(choices=DAYOFF_CHOICES , max_length=40)
+    hours = models.CharField(choices=HOLIDAY_CHOICES , max_length=40)
     start = models.DateField()
     end = models.DateField()
 
@@ -35,8 +44,13 @@ class Holiday(models.Model):
 
 
 class Absence(models.Model):
+    ABSENCES_CHOICES = (
+        ('Sick Leave','Sick Leave'),
+        ('_','_'),
+    )
     employee = models.ForeignKey(Employee , on_delete=models.CASCADE)
     days = models.IntegerField(validators=[MinValueValidator(1) , MaxValueValidator(1000)])
+    reason = models.CharField(max_length=100, choices=ABSENCES_CHOICES,default='_')
     start = models.DateField()
     end = models.DateField()
 
@@ -45,21 +59,23 @@ class Absence(models.Model):
 
 
 
-class Salary(models.Model):
-    employee = models.ForeignKey(Employee , on_delete=models.CASCADE)
-    amount = models.FloatField()
-    created_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self) -> str:
-        return f'{self.employee.username}-{self.amount}'
-    
+class Recruitment(models.Model):
+    POSITION_CHOICES = (
+        ('Intern','Intern'),
+        ('Full-Time','Full-Time'),
+        ('Part-Time','Part-Time'),
+    )
+    STATE_CHOICES = (
+        ('Done','Done'),
+        ('Review','Review'),
+        ('Initial','Initial'),
+    )
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    birthday = models.DateField()
+    state = models.CharField(max_length=30 , choices=STATE_CHOICES)
+    image = models.ImageField(upload_to='recruiters/images', default='placeholder.jpg')
+    position = models.CharField(max_length=100 , choices=POSITION_CHOICES)
+    department = models.CharField(max_length=100)
 
-
-
-# class UpfrontPayment(models.Model):
-#     pass
-
-
-
-# class Absence(models.Model):
-#     pass
