@@ -1,27 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}Absences List{% endblock %}
+{% block title %}Goals List{% endblock %}
 
 {% block content %}
 <div style="display: flex; flex-direction: row; justify-content: space-between;">
-    <h1>All Absences</h1>
+    <h1>All Goals</h1>
     {% if request.user.role == 'Moderator' or 'Admin' %}
-    <h6 style="align-self: center;"><a href="{% url 'create_absence' %}"><button type="button" class="btn btn-success">Add +</button></a></h6>
+    <h6 style="align-self: center;"><a href="{% url 'create_goal' %}"><button type="button" class="btn btn-success">Add +</button></a></h6>
     {% endif %}
 </div>
-
-
-
 
 
 <table class="table">
     <thead class="thead-dark">
       <tr>
         <th scope="col">select</th>
-        <th scope="col">ID</th>
-        <th scope="col">Username</th>
-        <th scope="col">From</th>
-        <th scope="col">To</th>
+        <th scope="col">Employee</th>
+        <th scope="col">Employee ID</th>
+        <th scope="col">Skill</th>
+        <th scope="col">Progress</th>
+        <th scope="col">Created</th>
         <th scope="col"></th>
       </tr>
     </thead>
@@ -43,14 +41,22 @@
                 <input type="submit" value="do action">
             </div>
             {% csrf_token %}
-            {% for absence in absences %}
+            {% for goal in goals %}
             <tr>
-                <td><input type="checkbox" name="selected_users" value="{{ absence.id }}"></td>
-                <th scope="row"><a href="{% url 'employee_profile' absence.id %}">{{ absence.id }}</a></th>
-                <td>{{ absence.employee.username }}</td>
-                <td>{{ absence.start }}</td>
-                <td>{{ absence.end }}</td>
-                <td><a href="{% url 'delete_employee' absence.id %}"><button type="button" class="btn btn-danger">delete</button></a></td>
+                <td><input type="checkbox" name="selected_users" value="{{ goal.id }}"></td>
+                <td>{{ goal.employee.username }}</td>
+                <td>{{ goal.employee.id }}</td>
+                <td>{{ goal.skill }}</td>
+                
+                <!-- <td>{{ goal.progress }}</td> -->
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{goal.progress}};" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ goal.progress }}</div>
+                    </div>
+                </td>
+
+                <td>{{ goal.created }}</td>
+                <td><a href="{% url 'delete_goal' goal.id %}"><button type="button" class="btn btn-danger">delete</button></a></td>
               </tr>
             {% endfor %}
         </form>
@@ -80,4 +86,5 @@
         {% endif %}
     </ul>
 </nav>
+
 {% endblock %}

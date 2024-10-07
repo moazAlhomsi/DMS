@@ -1,27 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}Absences List{% endblock %}
+{% block title %}Skills List{% endblock %}
 
 {% block content %}
 <div style="display: flex; flex-direction: row; justify-content: space-between;">
-    <h1>All Absences</h1>
+    <h1>All Skills</h1>
     {% if request.user.role == 'Moderator' or 'Admin' %}
-    <h6 style="align-self: center;"><a href="{% url 'create_absence' %}"><button type="button" class="btn btn-success">Add +</button></a></h6>
+    <h6 style="align-self: center;"><a href="{% url 'create_skill' %}"><button type="button" class="btn btn-success">Add +</button></a></h6>
     {% endif %}
 </div>
-
-
-
 
 
 <table class="table">
     <thead class="thead-dark">
       <tr>
         <th scope="col">select</th>
-        <th scope="col">ID</th>
-        <th scope="col">Username</th>
-        <th scope="col">From</th>
-        <th scope="col">To</th>
+        <th scope="col">Name</th>
+        <th scope="col">Created</th>
         <th scope="col"></th>
       </tr>
     </thead>
@@ -43,14 +38,12 @@
                 <input type="submit" value="do action">
             </div>
             {% csrf_token %}
-            {% for absence in absences %}
+            {% for skill in skills %}
             <tr>
-                <td><input type="checkbox" name="selected_users" value="{{ absence.id }}"></td>
-                <th scope="row"><a href="{% url 'employee_profile' absence.id %}">{{ absence.id }}</a></th>
-                <td>{{ absence.employee.username }}</td>
-                <td>{{ absence.start }}</td>
-                <td>{{ absence.end }}</td>
-                <td><a href="{% url 'delete_employee' absence.id %}"><button type="button" class="btn btn-danger">delete</button></a></td>
+                <td><input type="checkbox" name="selected_users" value="{{ skill.id }}"></td>
+                <td>{{ skill.name }}</td>
+                <td>{{ skill.created }}</td>
+                <td><a href="{% url 'delete_skill' skill.id %}"><button type="button" class="btn btn-danger">delete</button></a></td>
               </tr>
             {% endfor %}
         </form>
@@ -58,6 +51,8 @@
 
     </tbody>
 </table>
+
+
 
 
 
@@ -80,4 +75,5 @@
         {% endif %}
     </ul>
 </nav>
+
 {% endblock %}

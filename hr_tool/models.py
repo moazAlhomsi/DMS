@@ -76,6 +76,34 @@ class Recruitment(models.Model):
     birthday = models.DateField()
     state = models.CharField(max_length=30 , choices=STATE_CHOICES)
     image = models.ImageField(upload_to='recruiters/images', default='placeholder.jpg')
-    position = models.CharField(max_length=100 , choices=POSITION_CHOICES)
+    position = models.CharField(max_length=100 , choices=POSITION_CHOICES,default='Initial')
     department = models.CharField(max_length=100)
+    resume = models.FileField(upload_to='recruitment/resumes',blank=True,null=True)
 
+
+
+
+class Skill(models.Model):
+    name = models.CharField(max_length=50)
+    created = models.DateField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+
+class WorkGoal(models.Model):
+    PROGRESS_CHOICES = (
+        ('0%','0%'),
+        ('25%','25%'),
+        ('50%','50%'),
+        ('75%','75%'),
+        ('100%','100%'),
+    )
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    skill = models.ForeignKey(Skill , on_delete=models.CASCADE) # modify the on_delete
+    created = models.DateField(auto_now_add=True)
+    progress = models.CharField(max_length=20 , choices=PROGRESS_CHOICES ,default="0%")
+
+    def __str__(self) -> str:
+        return f"{self.employee.username} - {self.skill}"

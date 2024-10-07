@@ -3,8 +3,8 @@ from typing import Any
 from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import Employee , Recruitment , Holiday , Absence
-from .forms import EmployeeRegistrationForm , EmployeeUpdateForm , HolidayForm
+from .models import Employee , Recruitment , Holiday , Absence , WorkGoal , Skill
+from .forms import EmployeeRegistrationForm , EmployeeUpdateForm , HolidayForm , WorkGoalForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import user_passes_test
@@ -235,8 +235,90 @@ class ListRecruitersView(ListView):
     
 
 
-# class GetRecruiterView(DetailView):
-#     model = Recruitment
-#     template_name = 'hr_tool/recruitment/recruiter_info.html'
-#     context_object_name = 'recruiter'
+
+class DeleteRecruiterView(DeleteView):
+    model = Recruitment
+    template_name = 'hr_tool/recruitment/delete_recruite.html'
+    success_url = '/hr/recruiters/'
+    context_object_name = 'recruiter'
+
+
+
+class CreateRecruiterView(DetailView):
+    model = Recruitment
+    template_name = 'hr_tool/recruitment/recruiter_info.html'
+    context_object_name = 'recruiter'
+
+
+
+
+
+
+class ListGoalsView(ListView):
+    model = WorkGoal
+    template_name = 'hr_tool/goals/goals.html'
+    context_object_name = 'goals'
+    paginate_by = 5
+
+    def get_queryset(self) -> QuerySet[Any]:
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q' , None)
+        if q:
+            queryset = queryset.filter(
+                employee__username__startswith = q
+            )
+        return queryset
+
+
+
+
+class CreateGoalView(CreateView):
+    model = WorkGoal
+    template_name = 'hr_tool/goals/create_goal.html'
+    success_url = '/hr/goals/'
+    form_class = WorkGoalForm
+
+
+
+class DeleteGoalView(DeleteView):
+    model = WorkGoal
+    template_name = 'hr_tool/goals/delete_goal.html'
+    success_url = '/hr/goals/'
+    context_object_name = 'goal'
+
+
+
+
+class ListSkillsView(ListView):
+    model = Skill
+    template_name = 'hr_tool/goals/skills.html'
+    context_object_name = 'skills'
+    paginate_by = 5
+
+    def get_queryset(self) -> QuerySet[Any]:
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q' , None)
+        if q:
+            queryset = queryset.filter(
+                name__startswith = q
+            )
+        return queryset
+
+
+
+
+class CreateSkillView(CreateView):
+    model = Skill
+    fields = ['name']
+    template_name = 'hr_tool/goals/create_skill.html'
+    success_url = '/hr/skills/'
+
+
+
+
+class DeleteSkillView(DeleteView):
+    model = Skill
+    template_name = 'hr_tool/goals/delete_skill.html'
+    success_url = '/hr/skills/'
+    context_object_name = 'skill'
 

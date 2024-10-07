@@ -5,53 +5,21 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar with links to different apps -->
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <!-- Welcome Message -->
-                    <h2>Welcome, {{ request.user.username }}!</h2>
-                </div>
-            </div>
-            <!-- Rest of your dashboard content -->
-            <div class="row">
-                <!-- Your existing sections for users, documents, etc. -->
-            </div>
-        </div>
-        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
-            <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="sidebarMenuLabel">Company name</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="{% url 'dashboard' %}">
-                                <svg class="bi"><use xlink:href="#house-fill"/></svg>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="{% url 'user_list' %}">
-                                <svg class="bi"><use xlink:href="#people"/></svg>
-                                Users
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="{% url 'document_list' %}">
-                                <svg class="bi"><use xlink:href="#file-earmark"/></svg>
-                                Documents
-                            </a>
-                        </li>
-                        <!-- Add more links as needed -->
-                    </ul>
-                </div>
-            </div>
-        </div>
 
         <!-- Main Content Area -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <main class="col-md-9 ms-sm-auto col-lg-12 px-md-4">
+            
+            <!-- <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Welcome, {{ request.user.username }}!</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                </div>
+            </div> -->
+
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Dashboard</h1>
             </div>

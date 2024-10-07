@@ -1,6 +1,5 @@
 # users/models.py
-
-from typing import Iterable
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -45,9 +44,26 @@ class User(AbstractUser):
 
 
 
-# class Settings(models.Model):
-#     info = models.CharField(max_length=100)
+class Settings(models.Model):
+    DATE_CHOICES = [
+        ('MM/DD/YY', 'DD/MM/YY'),
+    ]
+    date_format = models.CharField(max_length=30 , choices=DATE_CHOICES)
+    info = models.CharField(max_length=100,default='test')
 
-#     def save(self, force_insert: bool = ..., force_update: bool = ..., using: str | None = ..., update_fields: Iterable[str] | None = ...) -> None:
-#         if 
-#         return super().save(force_insert, force_update, using, update_fields)
+    @classmethod
+    def get_instance(cls):
+        instance = cls.objects.first()
+        if instance is None:
+            instance = cls()
+        return instance
+    
+    def clean(self):
+        if self.pk is None:
+            if Settings.objects.exists():
+                raise ValidationError("Only one Settings instance is allowed.")
+        super().clean()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)

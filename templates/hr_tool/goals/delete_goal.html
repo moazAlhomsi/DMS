@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Delete Holiday</h2>
+<h2>Delete Goal</h2>
 <form method="post">
     {% csrf_token %}
-    <p>Are you sure you want to delete holiday for employee "{{ day.employee.username }}"?</p>
+    <p>Are you sure you want to delete this goal "{{ goal.name }}" for employee {{ goal.name }}?</p>
     <button type="submit">Confirm Delete</button>
 </form>
 {% endblock %}

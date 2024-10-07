@@ -1,4 +1,4 @@
-from .models import Employee , Holiday
+from .models import Employee , Holiday , Skill , WorkGoal
 from django import forms
 from django.forms.widgets import TextInput
 
@@ -34,3 +34,15 @@ class HolidayForm(forms.ModelForm):
     class Meta:
         model = Holiday
         fields = ['employee' , 'daterange', 'hours']
+
+
+class SkillForm(forms.ModelForm):
+    class Meta:
+        model = Skill
+        fields = ['name']
+
+
+class WorkGoalForm(forms.ModelForm):
+    class Meta:
+        model = WorkGoal
+        exclude = ['created']

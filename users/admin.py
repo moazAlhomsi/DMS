@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import User
+from .models import User , Settings
 from django.contrib.auth.admin import UserAdmin
+
 
 # Register your models here.
 
@@ -16,7 +17,7 @@ class CustomUserAdmin(UserAdmin):
                 {'fields':('email', 'password',)}
             ),
             ('User Information',
-                {'fields':('username', 'first_name', 'last_name')}
+                {'fields':('username', 'first_name', 'last_name' , 'image')}
             ),
             ('Permissions', 
                 {'fields':('is_staff', 'is_superuser', 'is_active', 'groups','user_permissions')}
@@ -28,3 +29,4 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(Settings)
