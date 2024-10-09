@@ -1,0 +1,15 @@
+
+  
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>طلب المستند: {{ document.title }}</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">إرسال الطلب</button>
+</form>
+<a href="{% url 'document_list' %}">عودة إلى قائمة المستندات</a>
+
+{% endblock %}

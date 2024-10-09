@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2> Dedcription Doucument </h2>
+    <br> 
+    <div>
+        <strong>Description:</strong> {{ document.description }}  
+    </div>
+    <br>
+    <a href="{% url 'document_list' %}">  back to document list </a>  
+{% endblock %}

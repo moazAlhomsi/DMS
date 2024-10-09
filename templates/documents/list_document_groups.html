@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Group List </h1>
+<br>
+    <ul >
+        {% for group in groups %}
+            <li>
+                <strong>{{ group.name }}</strong>
+                <ul>
+                    {% for document in group.documents.all %}
+                        <li>{{ document.title }}</li>
+                    {% endfor %}
+                </ul>
+                <br>
+    
+                <a href="{% url 'edit_document_group' group.id  %}">
+                    <button class="btn" type="button" style="background-color: #007bff; color: white;">
+                        Edit group 
+                    </button>
+                </a>
+
+                <a href="{% url 'delete_document_group' group.id  %}">
+                    <button class="btn" type="button" style="background-color: #007bff; color: white;">
+                        delete group
+                    </button>
+                </a>
+            </li>
+        {% empty %}
+            <li>NON Group</li>
+        {% endfor %}
+    </ul>
+
+
+
+
+<a href="{% url 'create_document_group' %}">
+    <button class="btn" type="button" style="background-color: #007bff; color: white;">
+        Create new group  
+    </button>
+</a>
+<br>
+<a href="{% url 'document_list' %}">Back to document list </a>
+
+<br>
+<br>
+
+<footer>
+    <p>&copy; 2024 My Document Management System</p>
+</footer>
+
+{% endblock %}
+
+
+

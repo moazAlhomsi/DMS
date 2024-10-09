@@ -1,12 +1,173 @@
-<!-- documents/templates/documents/list.html -->
-
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Document List</h2>
-  <ul>
-    {% for document in documents %}
-      <li>{{ document.title }} ({{ document.file_type }}) - Uploaded by {{ document.uploaded_by }}</li>
-    {% endfor %}
-  </ul>
+<style>
+    body {
+        background-color: #f8f9fa; /* لون خلفية فاتح */
+    }
+    .sidebar {
+    background-color: #98c1d9; /* لون خلفية الشريط الجانبي */
+    color: #333; /* لون النص في الشريط الجانبي */
+    font-size: 20px; /* حجم الخط */
+    
+    padding: 18px;
+    border: 5px solid #ccc;
+    }
+
+    .sidebar a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+        border-bottom: 2px solid #ddd;
+    }
+
+    .sidebar a:hover {
+        background-color: #f0f0f0;
+    }
+    .card {
+        border: 1px solid #ced4da;
+        border-radius: 1rem;
+    }
+    .card-title {
+        color: #007bff; /* لون عنوان البطاقة */
+    }
+    .dropdown-toggle {
+        background-color: #007bff; /* لون زر القائمة المنسدلة */
+        color: #ffffff; /* لون النص في الزر */
+    }
+    .dropdown-item {
+        color: #343a40; /* لون النص في عناصر القائمة المنسدلة */
+    }
+    .dropdown-item:hover {
+        background-color: #007bff; /* لون الخلفية عند التحويم على عناصر القائمة */
+        color: #ffffff; /* لون النص عند التحويم */
+    }
+    
+
+    .card-header {
+        background-color: #007bff; /* لون خلفية الرأس */
+        color: white; /* لون النص */
+    }
+
+   
+  
+
+   
+</style>
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar bg-light" style="width: 300px; height: 100vh; position: fixed; left: 0;">
+        <h2 class="p-3">Choices</h2>
+        <div class="nav flex-column">
+            <a href="{% url 'document_upload' %}" class="nav-link btn btn-warning">Upload Document</a>
+            <a href="{% url 'create_document_group' %}" class="nav-link btn btn-warning">Create Group</a>
+            <a href="#" class="nav-link btn btn-primary">Create Document</a>
+            <a href="#" class="nav-link btn btn-primary">السماح لمجموع من الاشخاص بالعمل على نفس المستند</a>
+            
+            <a href="#" class="nav-link btn btn-primary">طلب مستند من احد الاشخاص</a>
+            <a href="#" class="nav-link btn btn-primary">ارسال مستند الى احد الاشخاص</a>
+            <a href="#" class="nav-link btn btn-primary">بحث متقدم</a>
+            <a href="#" class="nav-link btn btn-primary">فلترة</a>
+            
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="container-fluid" >
+        <h2 class="mt-4">Document List</h2>
+    <br>
+        
+        <!-- Search Documents -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Search Documents</h5>
+            </div>
+            <div class="card-body">
+                <form method="get" action="">
+                    <div class="input-group">
+                        {{ search_form.as_p }}
+                    </div>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+
+       
+
+        <div class="row">
+            {% for document in documents %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><strong>Title :  </strong>{{ document.title }}</h5>
+                            <p class="card-text">
+                                <strong>ID:</strong> {{ document.id }}<br>
+                                <strong>File Type:</strong> {{ document.file_type }}<br>
+                                <strong>Uploaded by:</strong> {{ document.uploaded_by }} on {{ document.upload_date|date:'Y-m-d' }}<br>
+                                <strong>Comment:</strong> {{ document.comment }} <br>
+                                <strong>language:</strong> {{ document.language }} <br>
+
+                               
+                                
+                               
+                            </p>
+
+                            <div class="document-actions">
+                                <div class="dropdown">
+                                   
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Option
+                                    </button>
+                                
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        
+                                        <li><a href="{{ document.file.url }}" class="dropdown-item">View</a></li>
+                                        <li><a href="{% url 'download_document' document.id %}" class="dropdown-item">Download</a></li>
+                                        <li><a href="{% url 'document_delete' document.id %}" class="dropdown-item">Delete</a></li>
+                                        <li><a href="{% url 'rename_document' document.id %}" class="dropdown-item">Rename</a></li>
+                                        <li><a href="{% url 'replace_document' document.id %}" class="dropdown-item">Replace</a></li>
+                                        <li><a href="{% url 'share_document' document.id %}" class="dropdown-item">Share</a></li>
+                                        <li><a href="{% url 'add_comment' document.id %}" class="dropdown-item">Add or Edit Comment</a></li>
+                                        <li><a href="{% url 'edit_username' document.id %}" class="dropdown-item">Edit Username</a></li>
+                                       
+                                        <li><a href="#" class="dropdown-item">اضافة صلاحيات على مستند</a></li>
+                                        <li><a href="#" class="dropdown-item">تعديل صلاحيات</a></li>
+                                        <li><a href="#" class="dropdown-item">قفل مستند</a></li>
+                                       
+                                        
+                                    </ul>
+                                    
+                                    <a href="{% url 'view_document_details' document.id %}">
+                                        <button class="btn" type="button" style="background-color: #007bff; color: white;">
+                                            Details
+                                        </button>
+                                    </a>
+                                    <a href="{% url 'view_document_content' document.id %}">
+                                        <button class="btn" type="button" style="background-color: #007bff; color: white;">
+                                            Content
+                                        </button>
+                                    </a>
+                                    <a href="{% url 'view_document_description' document.id %}">
+                                        <button class="btn" type="button" style="background-color: #007bff; color: white;">
+                                            Descraptin_Ai
+                                        </button>
+                                    </a>
+                                    
+                                   
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<footer>
+    <p>&copy; 2024 My Document Management System</p>
+</footer>
+
 {% endblock %}

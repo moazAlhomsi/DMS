@@ -1,0 +1,27 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1> group document name : {{ group.name }}</h1>
+<ul>
+    {% for document in group.documents.all %}
+        <li>{{ document.title }}</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'create_document_group' %}">
+    <button class="btn" type="button" style="background-color: #007bff; color: white;">
+        Create New group
+    </button>
+</a>
+<br>
+<br>
+<a href="{% url 'list_document_groups' %}">
+    <button class="btn" type="button" style="background-color: #007bff; color: white;">
+        View groups 
+    </button>
+</a>
+{% endblock %}
+
+

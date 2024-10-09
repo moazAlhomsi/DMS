@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Edit Username: {{ document.uploaded_by }}</h1>
+<form method="post">
+    {% csrf_token %}
+    <label for="new_username">New Username:</label>
+    <input type="text" id="new_username" name="new_username" required>
+    <button type="submit">submit</button>
+</form>
+
+{% endblock %}
+
+

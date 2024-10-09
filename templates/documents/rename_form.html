@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Rename Document: {{ document.title }}</h1>
+<form method="post">
+    {% csrf_token %}
+    <label for="new_title">New Title:</label>
+    <input type="text" id="new_title" name="new_title" required>
+    <button type="submit">Update</button>
+</form>
+
+{% endblock %}
